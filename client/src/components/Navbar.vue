@@ -1,17 +1,17 @@
 <template>
 <nav class="site-header sticky-top py-1">
   <div class="container d-flex flex-column flex-md-row justify-content-between">
-    <a class="py-2" href="#" aria-label="Product">
+    <router-link class="py-2" to='/' aria-label="Product">
       <span>Apple.ID</span>
-    </a>
-    <a class="py-2 d-none d-md-inline-block" href="#">Iphone</a>
-    <a class="py-2 d-none d-md-inline-block" href="#">Ipad</a>
-    <a class="py-2 d-none d-md-inline-block" href="#">MacBook</a>
-    <a class="py-2 d-none d-md-inline-block" href="#">Mac Pro</a>
-    <a class="py-2 d-none d-md-inline-block" href="#">Airpods</a>
-    <a class="py-2 d-none d-md-inline-block" href="#">Accessories</a>
-    <a class="py-2 d-none d-md-inline-block" href="#">Support</a>
-    <a class="py-2 d-none d-md-inline-block" href="#">Cart</a>
+    </router-link>
+    <router-link class="py-2 d-none d-md-inline-block" to="/iphone">Iphone</router-link>
+    <router-link class="py-2 d-none d-md-inline-block" to="/ipad">Ipad</router-link>
+    <router-link class="py-2 d-none d-md-inline-block" to="/macbook">Macbook</router-link>
+    <router-link class="py-2 d-none d-md-inline-block" to="/mac">Mac</router-link>
+    <router-link class="py-2 d-none d-md-inline-block" to="/airpods">Airpods</router-link>
+    <router-link class="py-2 d-none d-md-inline-block" to="/accessories">Accessories</router-link>
+    <router-link class="py-2 d-none d-md-inline-block" to="/support">Support</router-link>
+    <router-link class="py-2 d-none d-md-inline-block" to="/cart">Cart</router-link>
   </div>
 </nav>
 </template>

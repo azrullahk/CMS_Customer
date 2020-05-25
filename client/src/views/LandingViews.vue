@@ -1,22 +1,16 @@
 <template>
   <div>
-    <Navbar></Navbar>
     <Main></Main>
-    <Footer></Footer>
   </div>
 </template>
 
 <script>
-import Navbar from '../components/Navbar'
 import Main from '../components/Main'
-import Footer from '../components/Footer'
 
 export default {
   name: 'LandingViews',
   components: {
-    Navbar,
     Main,
-    Footer
   }
 }
 </script>

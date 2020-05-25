@@ -3,44 +3,41 @@
     <div class="row">
       <div class="col-12 col-md">
         <h1>Apple.ID</h1>
+        <p>Apple.ID adalah salah satu distributor resmi produk-produk APPLE di Indonesia.</p>
       <!-- <small class="d-block mb-3 text-muted">&copy; 2017-{{ site.time | date: "%Y" }}</small> -->
       </div>
       <div class="col-6 col-md">
-      <h5>Features</h5>
+      <h5>Produck</h5>
       <ul class="list-unstyled text-small">
-        <li><a class="text-muted" href="#">Cool stuff</a></li>
-        <li><a class="text-muted" href="#">Random feature</a></li>
-        <li><a class="text-muted" href="#">Team feature</a></li>
-        <li><a class="text-muted" href="#">Stuff for developers</a></li>
-        <li><a class="text-muted" href="#">Another one</a></li>
-        <li><a class="text-muted" href="#">Last time</a></li>
+        <li><a class="text-muted" href="#">Iphone</a></li>
+        <li><a class="text-muted" href="#">Ipad</a></li>
+        <li><a class="text-muted" href="#">Macbook</a></li>
+        <li><a class="text-muted" href="#">Airpods</a></li>
       </ul>
       </div>
       <div class="col-6 col-md">
-      <h5>Resources</h5>
+      <h5>Informasi</h5>
       <ul class="list-unstyled text-small">
-        <li><a class="text-muted" href="#">Resource</a></li>
-        <li><a class="text-muted" href="#">Resource name</a></li>
-        <li><a class="text-muted" href="#">Another resource</a></li>
-        <li><a class="text-muted" href="#">Final resource</a></li>
+        <li><a class="text-muted" href="#">Tentang Apple.ID</a></li>
+        <li><a class="text-muted" href="#">Karir</a></li>
+        <li><a class="text-muted" href="#">Syarat Ketentuan Layanan</a></li>
+        <li><a class="text-muted" href="#">Klaim Garansi</a></li>
       </ul>
       </div>
       <div class="col-6 col-md">
-      <h5>Resources</h5>
+      <h5>Bantuan</h5>
         <ul class="list-unstyled text-small">
-            <li><a class="text-muted" href="#">Business</a></li>
-            <li><a class="text-muted" href="#">Education</a></li>
-            <li><a class="text-muted" href="#">Government</a></li>
-            <li><a class="text-muted" href="#">Gaming</a></li>
+            <li><a class="text-muted" href="#">Cara Pemesanan</a></li>
+            <li><a class="text-muted" href="#">Cara Pembayaran</a></li>
+            <li><a class="text-muted" href="#">Informasi Pengiriman</a></li>
+            <li><a class="text-muted" href="#">Pembatalan Transaksi</a></li>
         </ul>
       </div>
       <div class="col-6 col-md">
-      <h5>About</h5>
+      <h5>Layanan</h5>
         <ul class="list-unstyled text-small">
-          <li><a class="text-muted" href="#">Team</a></li>
-          <li><a class="text-muted" href="#">Locations</a></li>
-          <li><a class="text-muted" href="#">Privacy</a></li>
-          <li><a class="text-muted" href="#">Terms</a></li>
+          <li><a class="text-muted" href="#">Lokasi</a></li>
+          <li><a class="text-muted" href="#">Hubungi Kami</a></li>
         </ul>
       </div>
     </div>
