@@ -16,37 +16,59 @@
                                 <th>Produk</th>
                                 <th>Nama Barang</th>
                                 <th>Jumlah</th>
-                                <th class="text-left">Harga</th>
-                                <th>Action</th>
+                                <th class="text-left">Total Harga</th>
+                                <th colspan="3">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><img src="https://s0.bukalapak.com/img/55848143041/large/iphone_11_pro_max_512gb_new_PRE_ORDER.jpg" style="height: 50px; witdh:50px;"> </td>
-                                <td>Iphone 11 Pro</td>
-                                <td><input class="form-control" type="text" value="1" /></td>
-                                <td class="text-left">Rp. 20,000,000</td>
-                                <td><button class="btn btn-sm btn-danger"> Hapus </button> </td>
+                            <!-- cart table -->
+                            <tr 
+                            v-for="product in cart" :key="product.id"
+                            >
+                                <td><img :src="product.imgUrl" style="height: 50px; witdh:50px;"> </td>
+                                <td> {{ product.name }} </td>
+                                <td> {{ product.quantity }} </td>
+                                <td class="text-left">Rp. {{ convertToRp(product.price*product.quantity) }} </td>
+                                <td> <button class="btn btn-sm btn-info" type="button" @click.prevent="substractQuantity(product.id)"> - </button> </td>
+                                <td> <button class="btn btn-sm btn-info" type="button" @click.prevent="addQuantity(product.id)"> + </button> </td>
+                                <td> <button class="btn btn-sm btn-danger" type="button" @click.prevent="deleteProductFromCart(product.id)"> Hapus </button> </td>
                             </tr>
+                            <!-- subtotal table -->
                             <tr>
                                 <td></td>
                                 <td></td>
                                 <td class="text-right">Sub-Total</td>
-                                <td class="text-left">Rp. 20,000,000</td>
+                                <td class="text-left">Rp. {{ convertToRp(subTotal) }} </td>
                                 <td></td>
                             </tr>
+                            <!-- select shiping courier -->
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td class="text-right" >Pilih Jasa Pengiriman</td>
+                                <td class="text-left">
+                                  <select class="form-control" id="exampleFormControlSelect1" v-model="seletedShiping">
+                                    <option
+                                    v-for="kurir in shiping" :key="kurir.id"
+                                    > {{ kurir.name }} </option>
+                                  </select>
+                                </td>
+                                <td></td>
+                            </tr>
+                            <!-- shiping cost table -->
                             <tr>
                                 <td></td>
                                 <td></td>
                                 <td class="text-right" >Biaya Pengiriman</td>
-                                <td class="text-left">Rp. 67,000</td>
+                                <td class="text-left">Rp. {{ convertToRp(shipingCost) }}</td>
                                 <td></td>
                             </tr>
+                            <!-- total cost table -->
                             <tr>
                                 <td></td>
                                 <td></td>
                                 <td class="text-right"><strong>Total</strong></td>
-                                <td class="text-left"><strong>Rp. 20,067,000</strong></td>
+                                <td class="text-left"><strong>Rp. {{ convertToRp(total) }}</strong></td>
                                 <td></td>
                             </tr>
                         </tbody>
@@ -54,10 +76,11 @@
                 </div>
             </div>
         </div>
+        <!-- button section -->
         <div class="col mb-2">
             <div class="row">
                 <div class="col-sm-12  col-md-6 button">
-                    <button class="btn btn-lg btn-block btn-info">Lanjut Belanja</button>
+                    <button class="btn btn-lg btn-block btn-info" @click.prevent="continuedShoping">Lanjut Belanja</button>
                 </div>
                 <div class="col-sm-12 col-md-6 button">
                     <button class="btn btn-lg btn-block btn-success" @click.prevent="checkoutBtn">Bayar</button>
@@ -69,12 +92,67 @@
 </template>
 
 <script>
+import convertToRp from '../helpers/convertToRp.js'
+
 export default {
   name: 'CartViews',
+  data () {
+    return {
+      subTotal: 0,
+      shipingCost: 0,
+      totalCost: 0,
+      seletedShiping: ''
+    }
+  },
   methods: {
     checkoutBtn () {
       this.$router.push('/checkout')
+    },
+    convertToRp (price) {
+      return convertToRp(price)
+    },
+    selectShiping (name) {
+      this.$store.state.shiping.forEach(element => {
+        if (element.name === name) {
+          this.shipingCost = element.cost
+        }
+      });
+    },
+    continuedShoping () {
+      this.$router.push('/')
+    },
+    addQuantity (id) {
+      console.log (id, "add")
+      this.$store.dispatch('addToCart', id)
+    },
+    substractQuantity (id) {
+      console.log (id, "substract")
+    },
+    deleteProductFromCart (id) {
+      console.log (id, "delete")
     }
+  },
+  computed: {
+    cart () {
+      this.$store.state.cart.forEach(element => {
+        let sum = element.price*element.quantity
+        this.subTotal+=sum
+      });
+      return this.$store.state.cart
+    },
+    shiping () {
+      return this.$store.state.shiping
+    },
+    total () {
+      return this.subTotal+this.shipingCost
+    }
+  },
+  watch: {
+    seletedShiping () {
+      this.selectShiping (this.seletedShiping)
+    }
+  },
+  created () {
   }
 }
 </script>

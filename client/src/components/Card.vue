@@ -4,7 +4,7 @@
     <div class="card-body">
       <h5 class="card-title">{{ product.name }}</h5>
       <p class="card-text">Rp. {{ convert(product.price) }}</p>
-      <a class="btn btn-primary addtocart" @click.prevent="addToCart">Add to Cart</a>
+      <a class="btn btn-primary addtocart" @click.prevent="addToCart(product.id)">Add to Cart</a>
     </div>
   </div>
 </template>
@@ -19,7 +19,8 @@ export default {
     convert (price) {
       return convertToRp (price)
     },
-    addToCart () {
+    addToCart (id) {
+      this.$store.dispatch('addToCart', id)
       this.$router.push('/cart')
     }
   }
