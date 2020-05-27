@@ -23,19 +23,19 @@
           <!-- begin invoice-header -->
           <div class="invoice-header">
               <div class="invoice-from">
-                <small>from</small>
+                <small>Dari</small>
                 <address class="m-t-5 m-b-5">
-                    <strong class="text-inverse">Twitter, Inc.</strong><br>
-                    Street Address<br>
-                    City, Zip Code<br>
+                    <strong class="text-inverse">Apple.ID</strong><br>
+                    Jl.Jakarta, No.78, Pusat Perkantoran<br>
+                    Dki Jakarta, 12345<br>
                     Phone: (123) 456-7890<br>
                     Fax: (123) 456-7890
                 </address>
               </div>
               <div class="invoice-to">
-                <small>to</small>
+                <small>Untuk</small>
                 <address class="m-t-5 m-b-5">
-                    <strong class="text-inverse">Company Name</strong><br>
+                    <strong class="text-inverse">User</strong><br>
                     Street Address<br>
                     City, Zip Code<br>
                     Phone: (123) 456-7890<br>
@@ -43,11 +43,15 @@
                 </address>
               </div>
               <div class="invoice-date">
-                <small>Invoice / July period</small>
-                <div class="date text-inverse m-t-5">August 3,2012</div>
+                <small>Invoice / date</small>
+                <div class="date text-inverse m-t-5">
+                  {{ date }}
+                </div>
                 <div class="invoice-detail">
-                    #0000123DSS<br>
-                    Services Product
+                  <h4>Invoice Number</h4>
+                    <h5>
+                      #{{invoiceNumber}}<br>
+                    </h5>
                 </div>
               </div>
           </div>
@@ -59,39 +63,22 @@
                 <table class="table table-invoice">
                     <thead>
                       <tr>
-                          <th>TASK DESCRIPTION</th>
-                          <th class="text-center" width="10%">RATE</th>
-                          <th class="text-center" width="10%">HOURS</th>
-                          <th class="text-right" width="20%">LINE TOTAL</th>
+                          <th>PRODUCT</th>
+                          <th class="text-center" width="10%">PRICE</th>
+                          <th class="text-center" width="10%">QUANTITY</th>
+                          <th class="text-right" width="20%">TOTAL COST</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
+                      <tr
+                        v-for="item in cartList" :key="item.id"
+                      >
                           <td>
-                            <span class="text-inverse">Website design &amp; development</span><br>
-                            <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id sagittis arcu.</small>
+                            <span class="text-inverse">{{ item.name }}</span><br>
                           </td>
-                          <td class="text-center">$50.00</td>
-                          <td class="text-center">50</td>
-                          <td class="text-right">$2,500.00</td>
-                      </tr>
-                      <tr>
-                          <td>
-                            <span class="text-inverse">Branding</span><br>
-                            <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id sagittis arcu.</small>
-                          </td>
-                          <td class="text-center">$50.00</td>
-                          <td class="text-center">40</td>
-                          <td class="text-right">$2,000.00</td>
-                      </tr>
-                      <tr>
-                          <td>
-                            <span class="text-inverse">Redesign Service</span><br>
-                            <small>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed id sagittis arcu.</small>
-                          </td>
-                          <td class="text-center">$50.00</td>
-                          <td class="text-center">50</td>
-                          <td class="text-right">$2,500.00</td>
+                          <td class="text-center">Rp. {{ convert(item.price) }}</td>
+                          <td class="text-center">{{ item.quantity }}</td>
+                          <td class="text-right">{{ convert(item.price*item.quantity) }}</td>
                       </tr>
                     </tbody>
                 </table>
@@ -103,19 +90,19 @@
                     <div class="invoice-price-row">
                       <div class="sub-price">
                           <small>SUBTOTAL</small>
-                          <span class="text-inverse">$4,500.00</span>
+                          <span class="text-inverse">Rp. {{ convert(allCost.subTotal) }}</span>
                       </div>
                       <div class="sub-price">
                           <i class="fa fa-plus text-muted"></i>
                       </div>
                       <div class="sub-price">
-                          <small>PAYPAL FEE (5.4%)</small>
-                          <span class="text-inverse">$108.00</span>
+                          <small>ONGKIR</small>
+                          <span class="text-inverse">Rp. {{ convert(allCost.shipingCost) }}</span>
                       </div>
                     </div>
                 </div>
                 <div class="invoice-price-right">
-                    <small>TOTAL</small> <span class="f-w-600">$4508.00</span>
+                    <small>TOTAL</small> <span class="f-w-600">Rp. {{ convert(allCost.totalCost) }} </span>
                 </div>
               </div>
               <!-- end invoice-price -->
@@ -147,8 +134,28 @@
 </template>
 
 <script>
-export default {
+import convertToRp from '../helpers/convertToRp.js'
 
+export default {
+  name: 'InvoiceViews',
+  data () {
+    return {
+      date: new Date(),
+      invoiceNumber: '0000123DSS',
+      cartList: '',
+      allCost: ''
+    }
+  },
+  methods: {
+    convert (price) {
+      return convertToRp (price)
+    }
+  },
+  created () {
+    this.cartList = this.$store.state.cart
+    this.allCost = this.$store.state.allCost
+    console.log(this.$store.state.cart)
+  }
 }
 </script>
 

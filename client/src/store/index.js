@@ -14,16 +14,30 @@ export default new Vuex.Store({
       {id:3, name: 'GOJEK', cost:75000},
       {id:4, name: 'GRAB', cost:75000}
     ],
+    selectedShiping: '',
+    allCost: ''
   },
   mutations: {
     SET_PRODUCT (state, payload) {
       state.product = payload
     },
     SET_CART (state, payload) {
-      state.cart.push(payload)
+      state.cart = payload
     },
     SET_PRODUCT_QUANTITY (state, payload) {
       state.cart = payload
+    },
+    SUBSTRAC_CART (state, payload) {
+      state.cart = payload
+    },
+    DELETE_FROM_CART (state, payload) {
+      state.cart = payload
+    },
+    SELECT_SHIPING (state, payload) {
+      state.selectedShiping = payload
+    },
+    SET_ALL_COST (state, payload) {
+      state.allCost = payload
     }
   },
   actions: {
@@ -41,13 +55,13 @@ export default new Vuex.Store({
       })
     },
     addToCart (context,id) {
-      let arr;
+      let arr = [];
       let exist = false
       if (this.state.cart.length === 0) {
         this.state.product.forEach(element => {
-          element.quantity = 1
           if (element.id === id) {
-            arr = element
+            element.quantity = 1
+            arr.push(element)
           }
         })
         context.commit('SET_CART', arr)
@@ -56,22 +70,63 @@ export default new Vuex.Store({
           if (el.id === id) {
             exist = true
             el.quantity++
-          } else {
-            this.state.product.forEach(element => {
-              if (element.id === id) {
-                element.quantity = 1
-                arr = element
-              }
-            })
           }
         });
         if (exist) {
-          context.commit('SET_PRODUCT_QUANTITY', this.state.cart)
+          context.commit('SET_CART', this.state.cart)
         } else {
-          context.commit('SET_CART', arr)
+            let newArr = this.state.cart
+            this.state.product.forEach(element => {
+              if (element.id === id) {
+                element.quantity = 1
+                newArr.push (element)
+              }
+            })
+          context.commit('SET_CART', newArr)
         }
       }
     },
+    substrac (context, id) {
+      let plus = false
+      this.state.cart.forEach(element => {
+        if (element.id === id) {
+          if (element.quantity < 2) {
+            let newArr = []
+            this.state.cart.forEach(element => {
+              if (element.id !== id) {
+                newArr.push(element)
+              }
+            });
+            context.commit('DELETE_FROM_CART', newArr)
+          } else {
+            plus = true
+            element.quantity--
+          }
+        }
+      });
+      if (plus) {
+        context.commit('SUBSTRAC_CART', this.state.cart)
+      }
+    },
+    deleteFromCart (context, id) {
+      let newArr = []
+      this.state.cart.forEach(element => {
+        if (element.id !== id) {
+          newArr.push(element)
+        }
+      });
+      context.commit('DELETE_FROM_CART', newArr)
+    },
+    selectShiping (context, name) {
+      this.state.shiping.forEach(element => {
+        if (element.name === name) {
+          context.commit('SELECT_SHIPING', element)
+        }
+      });
+    },
+    setAllCost (context, payload) {
+      context.commit('SET_ALL_COST', payload)
+    }
   },
   modules: {
   }

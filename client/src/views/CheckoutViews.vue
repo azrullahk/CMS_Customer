@@ -7,25 +7,28 @@
     </section>
   <div class="container">
     <div class="row">
+      <!-- cart list -->
       <div class="col-md-4 order-md-2 mb-4">
         <h4 class="d-flex justify-content-between align-items-center mb-3">
           <span class="text-muted">Your cart</span>
-          <span class="badge badge-primary badge-pill">1</span>
+          <span class="badge badge-primary badge-pill"> {{ cartList.length }} </span>
         </h4>
         <ul class="list-group mb-3">
-          <li class="list-group-item d-flex justify-content-between lh-condensed">
+          <li class="list-group-item d-flex justify-content-between lh-condensed"
+          v-for="item in cartList" :key="item.id"
+          >
             <div>
-              <h6 class="my-0">Iphone 11 Pro</h6>
-              <small class="text-muted">New iphone 11 pro</small>
+              <h6 class="my-0">{{ item.name }}</h6>
+              <small class="text-muted">Jumlah : {{ item.quantity }} </small>
             </div>
-            <span class="text-muted">Rp. 20,000,000</span>
+            <span class="text-muted">Rp. {{ convert(item.price*item.quantity) }} </span>
           </li>
           <li class="list-group-item d-flex justify-content-between lh-condensed">
             <div>
               <h6 class="my-0">Ongkos Kirim</h6>
-              <small class="text-muted"> Jakarta </small>
+              <small class="text-muted"> {{ allCost.seletedShiping }} </small>
             </div>
-            <span class="text-muted">Rp. 67,000</span>
+            <span class="text-muted">Rp. {{ convert(allCost.shipingCost) }}</span>
           </li>
           <li class="list-group-item d-flex justify-content-between bg-light">
             <div class="text-success">
@@ -36,7 +39,7 @@
           </li>
           <li class="list-group-item d-flex justify-content-between">
             <span>Total</span>
-            <strong>Rp. 20,067,000</strong>
+            <strong>Rp. {{ convert(allCost.totalCost) }}</strong>
           </li>
         </ul>
 
@@ -49,6 +52,7 @@
           </div>
         </form>
       </div>
+      <!-- shiping form -->
       <div class="col-md-8 order-md-1">
         <h4 class="mb-3">Alamat Penagihan</h4>
         <form @submit.prevent="submitPayment">
@@ -166,12 +170,28 @@
 </template>
 
 <script>
+import convertToRp from '../helpers/convertToRp.js'
 export default {
   name: 'CheckoutViews',
+  data () {
+    return {
+      cartList: [],
+      shipingMethod: '',
+      allCost: ''
+    }
+  },
   methods: {
     submitPayment () {
       this.$router.push('/invoice')
+    },
+    convert (price) {
+      return convertToRp (price)
     }
+  },
+  created () {
+    this.cartList = this.$store.state.cart
+    this.allCost = this.$store.state.allCost
+    console.log(this.allCost)
   }
 }
 </script>

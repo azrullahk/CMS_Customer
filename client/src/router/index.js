@@ -7,6 +7,7 @@ import MacbookViews from '../views/MacbookViews'
 import CartViews from '../views/CartViews'
 import CheckoutViews from '../views/CheckoutViews'
 import InvoiceViews from '../views/InvoiceViews'
+import Reload from '../views/ReloadViews'
 
 Vue.use(VueRouter)
 
@@ -45,7 +46,12 @@ Vue.use(VueRouter)
     path: '/invoice',
     name: 'Invoice',
     component: InvoiceViews
-  }
+  },
+  {
+    path: '/reload',
+    name: 'Reload',
+    component: Reload
+  },
 ]
 
 const router = new VueRouter({

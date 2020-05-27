@@ -6,7 +6,7 @@
       </div>
     </section>
     <!-- Main Content -->
-    <div class="container mb-4">
+    <div class="container mb-4" v-if="cart.length !== 0" id="cart">
         <div class="row">
             <div class="col-12">
                 <div class="table-responsive">
@@ -40,6 +40,8 @@
                                 <td class="text-right">Sub-Total</td>
                                 <td class="text-left">Rp. {{ convertToRp(subTotal) }} </td>
                                 <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                             <!-- select shiping courier -->
                             <tr>
@@ -47,12 +49,14 @@
                                 <td></td>
                                 <td class="text-right" >Pilih Jasa Pengiriman</td>
                                 <td class="text-left">
-                                  <select class="form-control" id="exampleFormControlSelect1" v-model="seletedShiping">
+                                  <select class="form-control" id="exampleFormControlSelect1" v-model="seletedShiping" required>
                                     <option
                                     v-for="kurir in shiping" :key="kurir.id"
                                     > {{ kurir.name }} </option>
                                   </select>
                                 </td>
+                                <td></td>
+                                <td></td>
                                 <td></td>
                             </tr>
                             <!-- shiping cost table -->
@@ -62,6 +66,8 @@
                                 <td class="text-right" >Biaya Pengiriman</td>
                                 <td class="text-left">Rp. {{ convertToRp(shipingCost) }}</td>
                                 <td></td>
+                                <td></td>
+                                <td></td>
                             </tr>
                             <!-- total cost table -->
                             <tr>
@@ -69,6 +75,8 @@
                                 <td></td>
                                 <td class="text-right"><strong>Total</strong></td>
                                 <td class="text-left"><strong>Rp. {{ convertToRp(total) }}</strong></td>
+                                <td></td>
+                                <td></td>
                                 <td></td>
                             </tr>
                         </tbody>
@@ -88,6 +96,15 @@
             </div>
         </div>
     </div>
+    <!-- Empty Cart -->
+    <div class="container mb-4" v-else id="emptyCart">
+      <div class="alert alert-warning">
+        <p>You don't have product in your cart</p>
+      </div>
+      <button class="btn btn-primary btn-ld" type="button" @click.prevent="continuedShoping">
+        Continue Shoping
+      </button>
+    </div>
   </div>
 </template>
 
@@ -100,18 +117,25 @@ export default {
     return {
       subTotal: 0,
       shipingCost: 0,
-      totalCost: 0,
       seletedShiping: ''
     }
   },
   methods: {
     checkoutBtn () {
+      let obj = {
+        subTotal: this.subTotal,
+        shipingCost: this.shipingCost,
+        totalCost: this.total,
+        seletedShiping: this.seletedShiping
+      }
+      this.$store.dispatch('setAllCost', obj)
       this.$router.push('/checkout')
     },
     convertToRp (price) {
       return convertToRp(price)
     },
     selectShiping (name) {
+      this.$store.dispatch('selectShiping', name)
       this.$store.state.shiping.forEach(element => {
         if (element.name === name) {
           this.shipingCost = element.cost
@@ -119,24 +143,27 @@ export default {
       });
     },
     continuedShoping () {
-      this.$router.push('/')
+      this.$router.go('-1')
     },
     addQuantity (id) {
-      console.log (id, "add")
+      // console.log (id, "add")
       this.$store.dispatch('addToCart', id)
+      this.$router.push('/reload')
     },
     substractQuantity (id) {
-      console.log (id, "substract")
+      this.$store.dispatch('substrac', id)
+      this.$router.push('/reload')
     },
     deleteProductFromCart (id) {
-      console.log (id, "delete")
+      this.$store.dispatch('deleteFromCart', id)
+      this.$router.push('/reload')
     }
   },
   computed: {
     cart () {
       this.$store.state.cart.forEach(element => {
-        let sum = element.price*element.quantity
-        this.subTotal+=sum
+        let sum = element.price * element.quantity
+        this.subTotal = this.subTotal + sum
       });
       return this.$store.state.cart
     },
@@ -153,6 +180,10 @@ export default {
     }
   },
   created () {
+    if ( this.$store.state.allCost ) {
+      this.shipingCost = this.$store.state.allCost.shipingCost
+      this.seletedShiping = this.$store.state.allCost.seletedShiping
+    }
   }
 }
 </script>
@@ -160,5 +191,13 @@ export default {
 <style scoped>
 .button {
   margin-top: 15px;
+}
+
+#cart {
+  min-height: 75vh;
+}
+
+#emptyCart {
+  height: 70vh;
 }
 </style>
