@@ -16,6 +16,10 @@ export default {
     Navbar,
     Footer,
   },
+  data () {
+    return {
+    }
+  },
   created() {
     this.$store.dispatch('getProduct')
   }

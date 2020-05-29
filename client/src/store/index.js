@@ -15,7 +15,10 @@ export default new Vuex.Store({
       {id:4, name: 'GRAB', cost:75000}
     ],
     selectedShiping: '',
-    allCost: ''
+    allCost: '',
+    isLogin: false,
+    current_user_payment: '',
+    isConfirmOrder: false,
   },
   mutations: {
     SET_PRODUCT (state, payload) {
@@ -38,6 +41,15 @@ export default new Vuex.Store({
     },
     SET_ALL_COST (state, payload) {
       state.allCost = payload
+    },
+    SET_IS_LOGIN (state, payload) {
+      state.isLogin = payload
+    },
+    SET_USER_PAYMENT_ADDRESS (state, payload) {
+      state.current_user_payment = payload
+    },
+    SET_CONFIRM_ORDER (state, payload) {
+      state.isConfirmOrder = payload
     }
   },
   actions: {
@@ -126,6 +138,34 @@ export default new Vuex.Store({
     },
     setAllCost (context, payload) {
       context.commit('SET_ALL_COST', payload)
+    },
+    isLogin(context, bool) {
+      context.commit('SET_IS_LOGIN', bool)
+    },
+    getPaymentAddress (context) {
+      Server ({
+       method: 'get',
+       url: '/customer/getPaymentAddress',
+       headers: {
+         token: localStorage.getItem('appleID_token')
+       }
+     })
+     .then(payment =>{
+       if (payment) {
+         context.commit('SET_USER_PAYMENT_ADDRESS', payment.data.result)
+       } else {
+         console.log("no payment address")
+       }
+     })
+     .catch(err =>{
+       console.log(err)
+     })
+    },
+    isConfirmOrder (context, bool) {
+      if (!bool) {
+        context.commit('SET_CART', [])
+      }
+      context.commit('SET_CONFIRM_ORDER', bool)
     }
   },
   modules: {

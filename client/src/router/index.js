@@ -8,6 +8,7 @@ import CartViews from '../views/CartViews'
 import CheckoutViews from '../views/CheckoutViews'
 import InvoiceViews from '../views/InvoiceViews'
 import Reload from '../views/ReloadViews'
+import LoginViews from '../views/LoginViews'
 
 Vue.use(VueRouter)
 
@@ -52,6 +53,11 @@ Vue.use(VueRouter)
     name: 'Reload',
     component: Reload
   },
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginViews
+  }
 ]
 
 const router = new VueRouter({

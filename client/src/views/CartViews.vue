@@ -7,6 +7,9 @@
     </section>
     <!-- Main Content -->
     <div class="container mb-4" v-if="cart.length !== 0" id="cart">
+      <div class="alert alert-danger" v-if="errRes">
+        {{ errRes }}
+      </div>
         <div class="row">
             <div class="col-12">
                 <div class="table-responsive">
@@ -102,7 +105,7 @@
         <p>You don't have product in your cart</p>
       </div>
       <button class="btn btn-primary btn-ld" type="button" @click.prevent="continuedShoping">
-        Continue Shoping
+        Go Shoping
       </button>
     </div>
   </div>
@@ -117,19 +120,26 @@ export default {
     return {
       subTotal: 0,
       shipingCost: 0,
-      seletedShiping: ''
+      seletedShiping: '',
+      errRes: ''
     }
   },
   methods: {
     checkoutBtn () {
-      let obj = {
-        subTotal: this.subTotal,
-        shipingCost: this.shipingCost,
-        totalCost: this.total,
-        seletedShiping: this.seletedShiping
+      if (!this.seletedShiping) {
+        this.errRes = 'Silahkan pilih jasa pengiriman'
+        console.log(this.seletedShiping, "errRes")
+      } else {
+        let obj = {
+          subTotal: this.subTotal,
+          shipingCost: this.shipingCost,
+          totalCost: this.total,
+          seletedShiping: this.seletedShiping
+        }
+        this.errRes = ''
+        this.$store.dispatch('setAllCost', obj)
+        this.$router.push('/checkout')
       }
-      this.$store.dispatch('setAllCost', obj)
-      this.$router.push('/checkout')
     },
     convertToRp (price) {
       return convertToRp(price)
@@ -143,7 +153,7 @@ export default {
       });
     },
     continuedShoping () {
-      this.$router.go('-1')
+      this.$router.push('/')
     },
     addQuantity (id) {
       // console.log (id, "add")
@@ -180,10 +190,16 @@ export default {
     }
   },
   created () {
-    if ( this.$store.state.allCost ) {
-      this.shipingCost = this.$store.state.allCost.shipingCost
-      this.seletedShiping = this.$store.state.allCost.seletedShiping
+    let token = localStorage.getItem('appleID_token')
+    if (!token) {
+      this.$router.push('/login')
+    } else {
+      if ( this.$store.state.allCost ) {
+        this.shipingCost = this.$store.state.allCost.shipingCost
+        this.seletedShiping = this.$store.state.allCost.seletedShiping
+      }
     }
+
   }
 }
 </script>

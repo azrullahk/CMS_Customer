@@ -87,7 +87,12 @@
 
 <script>
 export default {
-  name: 'Main'
+  name: 'Main',
+  created() {
+    if (this.$store.state.isConfirmOrder) {
+      this.$store.dispatch('isConfirmOrder', false)
+    }
+  }
 }
 </script>
 
