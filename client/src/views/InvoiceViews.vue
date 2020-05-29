@@ -16,7 +16,8 @@
               </h1>
             </div>
             <div class="col-10 text-right">
-              <button class="btn btn-primary btn-lg" type="button" onclick="window.print()">Export to PDF</button>
+              <button class="btn btn-primary btn-lg" type="button" onclick="window.print()">Export to PDF</button> <span> </span>
+              <button class="btn btn-warning btn-lg" type="button" @click.prevent="toOrders">View Order</button>
             </div>
           </div>
           <!-- end invoice-company -->
@@ -149,12 +150,19 @@ export default {
   methods: {
     convert (price) {
       return convertToRp (price)
+    },
+    toOrders () {
+      this.$store.dispatch('isConfirmOrder', false)
+      this.$store.dispatch('getUserOrder')
+      this.$router.push('orders')
     }
   },
   created () {
     this.cartList = this.$store.state.cart
     this.allCost = this.$store.state.allCost
-    console.log(this.$store.state.cart)
+    if (!this.$store.state.isConfirmOrder) {
+      this.$router.push('/')
+    }
   }
 }
 </script>

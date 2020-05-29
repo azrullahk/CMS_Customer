@@ -9,6 +9,8 @@ import CheckoutViews from '../views/CheckoutViews'
 import InvoiceViews from '../views/InvoiceViews'
 import Reload from '../views/ReloadViews'
 import LoginViews from '../views/LoginViews'
+import RegisterViews from '../views/RegisterViews'
+import OrdersViews from '../views/OrdersViews'
 
 Vue.use(VueRouter)
 
@@ -57,6 +59,16 @@ Vue.use(VueRouter)
     path: '/login',
     name: 'Login',
     component: LoginViews
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: RegisterViews
+  },
+  {
+    path: '/orders',
+    name: 'Orders',
+    component: OrdersViews
   }
 ]
 

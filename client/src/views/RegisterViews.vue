@@ -1,8 +1,8 @@
 <template>
 <div>
-  <section class="jumbotron text-center" style="height: 60px;">
+  <section class="jumbotron text-center" style="height: 60px;" v-if="!sucRes">
       <div class="container">
-        <h1 class="jumbotron-heading">Please Login First Before Continue</h1>
+        <h1 class="jumbotron-heading">Please input your valid data</h1>
       </div>
   </section>
   <div class="container main">
@@ -10,12 +10,21 @@
         Apple.ID
       </h1> <br>
       <div class="col-4">
+        <!-- err respon -->
         <div class="alert alert-danger"
         v-if="errRes"
         >
           {{ errRes }}
         </div>
-        <form @submit.prevent="login">
+        <!-- success respond -->
+        <div v-if="sucRes" >
+          <div class="alert alert-success">
+            {{ sucRes }}
+          </div>
+          <button type="button" class="btn btn-info btn-lg" @click.prevent="cancelBtn">Back to login page</button>
+        </div>
+        <!-- form register -->
+        <form @submit.prevent="register" class="text-left" v-if="!sucRes">
           <div class="form-group">
             <label for="exampleInputEmail1">Email</label>
             <input type="email" class="form-control" aria-describedby="emailHelp" v-model="email">
@@ -24,13 +33,13 @@
             <label for="exampleInputPassword1">Password</label>
             <input type="password" class="form-control" v-model="password">
           </div>
-          <button type="submit" class="btn btn-primary btn-block">Login</button>
-        </form> <br>
-        <!-- register button -->
-        <span class="text text-muted">
-          Didn't have an account ?
-        </span> <br> <hr>
-        <button class="btn btn-info btn-lg" @click.prevent="registerBtn">Register Here</button>
+          <div class="form-group">
+            <label for="exampleInputPassword1">Confirm Password</label>
+            <input type="password" class="form-control" v-model="confirm_password">
+          </div>
+        <button type="submit" class="btn btn-primary btn-lg">Register</button> <span> </span>
+        <button type="button" class="btn btn-danger btn-lg" @click.prevent="cancelBtn">Cancel</button>
+        </form>
       </div>
   </div>
 </div>
@@ -40,36 +49,36 @@
 import server from '../api' 
 
 export default {
-  name: 'LoginViews',
+  name: 'RegisterViews',
   data () {
     return {
       email: '',
       password: '',
-      errRes: ''
+      confirm_password: '',
+      errRes: '',
+      sucRes: ''
     }
   },
   methods: {
-    login () {
+    register () {
       server({
         method: 'post',
-        url: '/customer/login',
+        url: '/customer/register',
         data: {
           email: this.email,
-          password: this.password
+          password: this.password,
+          confirm_password: this.confirm_password
         }
       })
       .then(result =>{
-        localStorage.setItem('appleID_token', result.data.token)
-        this.$store.dispatch('isLogin', true)
-        this.$store.dispatch('getUserOrder')
-        this.$router.push('/cart')
+        this.sucRes = 'Successfuly register'
       })
       .catch(err =>{
         this.errRes = err.response.data.msg
       })
     },
-    registerBtn () {
-      this.$router.push('/register')
+    cancelBtn () {
+      this.$router.push('/login')
     }
   },
   created () {
@@ -87,6 +96,5 @@ export default {
   display: flex;
   align-items: center;
   flex-direction: column;
-  height: 70vh;
 }
 </style>

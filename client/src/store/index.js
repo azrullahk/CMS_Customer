@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     product: [],
     cart: [],
+    UserOrder: [],
     shiping: [
       {id:1, name: 'JNE', cost:50000},
       {id:2, name: 'JNT', cost:60000},
@@ -50,6 +51,9 @@ export default new Vuex.Store({
     },
     SET_CONFIRM_ORDER (state, payload) {
       state.isConfirmOrder = payload
+    },
+    SET_USER_ORDERS (state, payload) {
+      state.UserOrder = payload
     }
   },
   actions: {
@@ -60,7 +64,6 @@ export default new Vuex.Store({
       })
       .then(result=> {
         context.commit('SET_PRODUCT', result.data)
-        console.log(result.data)
       })
       .catch(err =>{
         console.log(err)
@@ -166,6 +169,22 @@ export default new Vuex.Store({
         context.commit('SET_CART', [])
       }
       context.commit('SET_CONFIRM_ORDER', bool)
+    },
+    getUserOrder (context) {
+      Server({
+        method: 'get',
+        url: '/customer/orders',
+        headers: {
+          token: localStorage.getItem('appleID_token')
+        }
+      })
+      .then(result =>{
+        context.commit('SET_USER_ORDERS', result.data)
+        // console.log(this.state.UserOrder)
+      })
+      .catch(err =>{
+        console.log(err)
+      })
     }
   },
   modules: {

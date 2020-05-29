@@ -55,6 +55,9 @@
       <!-- shiping form -->
       <div class="col-md-8 order-md-1">
         <h4 class="mb-3">Alamat Penagihan</h4>
+        <div class="col-12" style="text-align: right;">
+          <router-link class="btn btn-warning" to="/reload">Auto Fill</router-link>
+        </div> <br>
         <form @submit.prevent="submitPayment">
           <!-- name field -->
           <div class="row">
@@ -223,6 +226,7 @@ export default {
         })
         .then(result =>{
           this.$store.dispatch('isConfirmOrder', true)
+          this.$store.dispatch('getUserOrder')
           this.$router.push('/invoice')
           console.log(result)
         })

@@ -17,7 +17,7 @@
       User
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <a class="dropdown-item text-inverse" @click.prevent="linkAccount">Account</a>
+      <a class="dropdown-item text-inverse" @click.prevent="toOrders">My Orders</a>
       <a class="dropdown-item text-inverse" @click="logout">Logout</a>
     </div>
   </div>
@@ -35,15 +35,15 @@ export default {
   computed: {
     isLogin () {
       return this.$store.state.isLogin
-    },
-    linkAccount () {
-      this.$router.push('/account')
     }
   },
   methods: {
     logout () {
       localStorage.clear()
       this.$router.go(0)
+    },
+    toOrders () {
+      this.$router.push('orders')
     }
   },
   created () {
